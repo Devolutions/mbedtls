@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 2.6)
 project("mbed TLS" C)
 
+if(CMAKE_TOOLCHAIN_FILE)
+    message(STATUS "Using toolchain file ${CMAKE_TOOLCHAIN_FILE}")
+endif()
+
 option(USE_PKCS11_HELPER_LIBRARY "Build mbed TLS with the pkcs11-helper library." OFF)
 option(ENABLE_ZLIB_SUPPORT "Build mbed TLS with zlib library." OFF)
 
@@ -32,7 +36,11 @@ set(NULL_ENTROPY_WARNING "${WARNING_BORDER}"
                          "${NULL_ENTROPY_WARN_L3}"
                          "${WARNING_BORDER}")
 
+set(_FIND_ROOT_PATH_MODE_PROGRAM ${CMAKE_FIND_ROOT_PATH_MODE_PROGRAM})
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 find_package(Perl)
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM ${_FIND_ROOT_PATH_MODE_PROGRAM})
+
 if(PERL_FOUND)
 
     # If NULL Entropy is configured, display an appropriate warning
