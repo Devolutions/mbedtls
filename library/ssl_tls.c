@@ -5723,6 +5723,7 @@ crt_verify:
         rs_ctx = &ssl->handshake->ecrs_ctx;
 #endif
 
+
     if( authmode != MBEDTLS_SSL_VERIFY_NONE )
     {
         mbedtls_x509_crt *ca_chain;
@@ -5744,13 +5745,24 @@ crt_verify:
         /*
          * Main check: verify certificate
          */
-        ret = mbedtls_x509_crt_verify_restartable(
+
+        if( authmode == MBEDTLS_SSL_VERIFY_EXTERNAL )
+        {
+            if( NULL != ssl->conf->f_vrfy )
+            {
+                ret = ssl->conf->f_vrfy( ssl->conf->p_vrfy, ssl->session_negotiate->peer_cert, -1, &ssl->session_negotiate->verify_result );
+            }
+        }
+        else
+        {
+            ret = mbedtls_x509_crt_verify_restartable(
                                 ssl->session_negotiate->peer_cert,
                                 ca_chain, ca_crl,
                                 ssl->conf->cert_profile,
                                 ssl->hostname,
                                &ssl->session_negotiate->verify_result,
                                 ssl->conf->f_vrfy, ssl->conf->p_vrfy, rs_ctx );
+        }
 
         if( ret != 0 )
         {
