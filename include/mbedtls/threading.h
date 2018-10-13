@@ -130,6 +130,9 @@ extern mbedtls_threading_mutex_t mbedtls_threading_readdir_mutex;
 #if defined(MBEDTLS_HAVE_TIME_DATE)
 extern mbedtls_threading_mutex_t mbedtls_threading_gmtime_mutex;
 #endif
+
+extern int mbedtls_threading_trylock; /**< The mutex trylock API is available. */
+
 #endif /* MBEDTLS_THREADING_C */
 
 #ifdef __cplusplus

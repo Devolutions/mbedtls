@@ -5653,6 +5653,10 @@ static int ssl_cookie_check_dummy( void *ctx,
 void mbedtls_ssl_init( mbedtls_ssl_context *ssl )
 {
     memset( ssl, 0, sizeof( mbedtls_ssl_context ) );
+
+#if defined(MBEDTLS_THREADING_C)
+    mbedtls_mutex_init( &ssl->out_mutex );
+#endif
 }
 
 /*
@@ -6942,8 +6946,18 @@ int mbedtls_ssl_read( mbedtls_ssl_context *ssl, unsigned char *buf, size_t len )
 #if defined(MBEDTLS_SSL_PROTO_DTLS)
     if( ssl->conf->transport == MBEDTLS_SSL_TRANSPORT_DATAGRAM )
     {
-        if( ( ret = mbedtls_ssl_flush_output( ssl ) ) != 0 )
-            return( ret );
+#if defined(MBEDTLS_THREADING_C)
+        if( mbedtls_threading_trylock && ( mbedtls_mutex_trylock( &ssl->out_mutex ) == 0 ) )
+        {
+#endif
+            if( ( ret = mbedtls_ssl_flush_output( ssl ) ) != 0 )
+                return( ret );
+
+#if defined(MBEDTLS_THREADING_C)
+            if( ( ret = mbedtls_mutex_unlock( &ssl->out_mutex ) ) != 0 )
+                return( ret );
+        }
+#endif
 
         if( ssl->handshake != NULL &&
             ssl->handshake->retransmit_state == MBEDTLS_SSL_RETRANS_SENDING )
@@ -7258,6 +7272,11 @@ static int ssl_write_real( mbedtls_ssl_context *ssl,
             len = max_len;
     }
 
+#if defined(MBEDTLS_THREADING_C)
+    if( ( ret = mbedtls_mutex_lock( &ssl->out_mutex ) ) != 0 )
+        return( ret );
+#endif
+
     if( ssl->out_left != 0 )
     {
         if( ( ret = mbedtls_ssl_flush_output( ssl ) ) != 0 )
@@ -7278,6 +7297,11 @@ static int ssl_write_real( mbedtls_ssl_context *ssl,
             return( ret );
         }
     }
+
+#if defined(MBEDTLS_THREADING_C)
+    if( ( ret = mbedtls_mutex_unlock( &ssl->out_mutex ) ) != 0 )
+        return( ret );
+#endif
 
     return( (int) len );
 }
@@ -7602,6 +7626,10 @@ void mbedtls_ssl_free( mbedtls_ssl_context *ssl )
 
 #if defined(MBEDTLS_SSL_DTLS_HELLO_VERIFY) && defined(MBEDTLS_SSL_SRV_C)
     mbedtls_free( ssl->cli_id );
+#endif
+
+#if defined(MBEDTLS_THREADING_C)
+    mbedtls_mutex_free( &ssl->out_mutex );
 #endif
 
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "<= free" ) );
