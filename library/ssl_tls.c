@@ -8629,7 +8629,7 @@ static int ssl_write_real( mbedtls_ssl_context *ssl,
         if( ( ret = mbedtls_ssl_flush_output( ssl ) ) != 0 )
         {
             MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_ssl_flush_output", ret );
-            return( ret );
+            goto exit_unlock;
         }
     }
     else
@@ -8646,7 +8646,7 @@ static int ssl_write_real( mbedtls_ssl_context *ssl,
         if( ( ret = mbedtls_ssl_write_record( ssl, SSL_FORCE_FLUSH ) ) != 0 )
         {
             MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_ssl_write_record", ret );
-            return( ret );
+            goto exit_unlock;
         }
     }
 
@@ -8656,6 +8656,12 @@ static int ssl_write_real( mbedtls_ssl_context *ssl,
 #endif
 
     return( (int) len );
+
+exit_unlock:
+#if defined(MBEDTLS_THREADING_C)
+    mbedtls_mutex_unlock( &ssl->out_mutex );
+#endif
+    return( ret );
 }
 
 /*
