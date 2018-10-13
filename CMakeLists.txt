@@ -5,6 +5,10 @@ else()
     project("mbed TLS" C)
 endif()
 
+if(CMAKE_TOOLCHAIN_FILE)
+    message(STATUS "Using toolchain file ${CMAKE_TOOLCHAIN_FILE}")
+endif()
+
 option(USE_PKCS11_HELPER_LIBRARY "Build mbed TLS with the pkcs11-helper library." OFF)
 option(ENABLE_ZLIB_SUPPORT "Build mbed TLS with zlib library." OFF)
 
@@ -47,7 +51,12 @@ set(CTR_DRBG_128_BIT_KEY_WARNING "${WARNING_BORDER}"
                          "${WARNING_BORDER}")
 
 find_package(PythonInterp)
+
+set(_FIND_ROOT_PATH_MODE_PROGRAM ${CMAKE_FIND_ROOT_PATH_MODE_PROGRAM})
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 find_package(Perl)
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM ${_FIND_ROOT_PATH_MODE_PROGRAM})
+
 if(PERL_FOUND)
 
     # If 128-bit keys are configured for CTR_DRBG, display an appropriate warning
