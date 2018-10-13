@@ -146,15 +146,45 @@ if(CMAKE_COMPILER_IS_CLANG)
     set(CMAKE_C_FLAGS_CHECK       "-Werror -Os")
 endif(CMAKE_COMPILER_IS_CLANG)
 
-if(CMAKE_COMPILER_IS_IAR)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --warn_about_c_style_casts --warnings_are_errors -Ohz")
-endif(CMAKE_COMPILER_IS_IAR)
+macro(configure_msvc_runtime)
+    if(MSVC)
+        if("${MSVC_RUNTIME}" STREQUAL "")
+            set(MSVC_RUNTIME "dynamic")
+        endif()
 
-if(CMAKE_COMPILER_IS_MSVC)
+        set(variables CMAKE_C_FLAGS
+            CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_MINSIZEREL
+            CMAKE_C_FLAGS_RELEASE CMAKE_C_FLAGS_RELWITHDEBINFO)
+
+        if(${MSVC_RUNTIME} STREQUAL "static")
+            message(STATUS "MSVC: using statically-linked runtime (/MT and /MTd).")
+            foreach(variable ${variables})
+                if(${variable} MATCHES "/MD")
+                    string(REGEX REPLACE "/MD" "/MT" ${variable} "${${variable}}")
+                endif()
+            endforeach()
+        else()
+            message(STATUS "MSVC: using dynamically-linked runtime (/MD and /MDd).")
+            foreach(variable ${variables})
+                if(${variable} MATCHES "/MT")
+                    string(REGEX REPLACE "/MT" "/MD" ${variable} "${${variable}}")
+                endif()
+            endforeach()
+        endif()
+
+        foreach(variable ${variables})
+            set(${variable} "${${variable}}" CACHE STRING "MSVC_${variable}" FORCE)
+        endforeach()
+    endif()
+endmacro(configure_msvc_runtime)
+
+if(MSVC)
     # Strictest warnings, and treat as errors
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /W3")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /WX")
-endif(CMAKE_COMPILER_IS_MSVC)
+
+    configure_msvc_runtime() # select between dynamic and static MSVC runtime
+endif(MSVC)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Coverage")
     if(CMAKE_COMPILER_IS_GNU OR CMAKE_COMPILER_IS_CLANG)
