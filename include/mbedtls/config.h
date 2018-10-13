@@ -1625,6 +1625,17 @@
 //#define MBEDTLS_THREADING_PTHREAD
 
 /**
+ * \def MBEDTLS_THREADING_WINDOWS
+ *
+ * Enable the Windows wrapper layer for the threading layer.
+ *
+ * Requires: MBEDTLS_THREADING_C
+ *
+ * Uncomment this to enable Windows mutexes.
+ */
+//#define MBEDTLS_THREADING_WINDOWS
+
+/**
  * \def MBEDTLS_VERSION_FEATURES
  *
  * Allow run-time checking of compile-time enabled features. Thus allowing users
