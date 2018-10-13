@@ -123,6 +123,7 @@ void (*mbedtls_mutex_free)( mbedtls_threading_mutex_t * ) = threading_mutex_free
 int (*mbedtls_mutex_lock)( mbedtls_threading_mutex_t * ) = threading_mutex_lock_pthread;
 int (*mbedtls_mutex_unlock)( mbedtls_threading_mutex_t * ) = threading_mutex_unlock_pthread;
 int (*mbedtls_mutex_trylock)( mbedtls_threading_mutex_t * ) = threading_mutex_trylock_pthread;
+int mbedtls_threading_trylock = 1;
 
 /*
  * With phtreads we can statically initialize mutexes
@@ -148,6 +149,7 @@ void (*mbedtls_mutex_free)( mbedtls_threading_mutex_t * ) = threading_mutex_dumm
 int (*mbedtls_mutex_lock)( mbedtls_threading_mutex_t * ) = threading_mutex_fail;
 int (*mbedtls_mutex_unlock)( mbedtls_threading_mutex_t * ) = threading_mutex_fail;
 int (*mbedtls_mutex_trylock)( mbedtls_threading_mutex_t * ) = threading_mutex_fail;
+int mbedtls_threading_trylock = 0;
 
 /*
  * Set functions pointers and initialize global mutexes
@@ -180,6 +182,7 @@ void mbedtls_threading_set_try_alt( void (*mutex_init)( mbedtls_threading_mutex_
                        int (*mutex_trylock)( mbedtls_threading_mutex_t * ) )
 {
     mbedtls_mutex_trylock = mutex_trylock;
+    mbedtls_threading_trylock = 1;
     mbedtls_threading_set_alt(mutex_init, mutex_free, mutex_lock, mutex_unlock);
 }
 

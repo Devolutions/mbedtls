@@ -65,6 +65,10 @@
 #include "platform_time.h"
 #endif
 
+#if defined(MBEDTLS_THREADING_C)
+#include "threading.h"
+#endif
+
 /*
  * SSL Error codes
  */
@@ -1139,6 +1143,9 @@ struct mbedtls_ssl_context
 #if defined(MBEDTLS_SSL_CBC_RECORD_SPLITTING)
     signed char split_done;     /*!< current record already splitted? */
 #endif /* MBEDTLS_SSL_CBC_RECORD_SPLITTING */
+#if defined(MBEDTLS_THREADING_C)
+    mbedtls_threading_mutex_t out_mutex;    /*!< output mutex         */
+#endif /* MBEDTLS_THREADING_C */
 
     /*
      * PKI layer
