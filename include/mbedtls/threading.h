@@ -49,6 +49,22 @@ typedef struct
 } mbedtls_threading_mutex_t;
 #endif
 
+#if defined(MBEDTLS_THREADING_WINDOWS)
+
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+
+#include <windows.h>
+
+typedef struct
+{
+    CRITICAL_SECTION cs;
+    char is_valid;
+} mbedtls_threading_mutex_t;
+
+#endif
+
 #if defined(MBEDTLS_THREADING_ALT)
 /* You should define the mbedtls_threading_mutex_t type in your header */
 #include "threading_alt.h"
