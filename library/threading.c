@@ -135,7 +135,7 @@ int mbedtls_threading_trylock = 1;
 #if defined(MBEDTLS_THREADING_WINDOWS)
 static void threading_mutex_init_windows( mbedtls_threading_mutex_t *mutex )
 {
-    if( mutex == NULL || mutex->is_valid )
+    if( mutex == NULL )
         return;
 
     InitializeCriticalSection( &mutex->cs );
