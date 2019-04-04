@@ -47,14 +47,20 @@ extern "C" {
 #define MBEDTLS_TLS_DHE_RSA_WITH_DES_CBC_SHA             0x15   /**< Weak! Not in TLS 1.2 */
 #define MBEDTLS_TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA        0x16
 
+#define MBEDTLS_TLS_DH_anon_WITH_RC4_128_MD5             0x18
+#define MBEDTLS_TLS_DH_anon_WITH_DES_CBC_SHA             0x1A
+#define MBEDTLS_TLS_DH_anon_WITH_3DES_EDE_CBC_SHA        0x1B
+
 #define MBEDTLS_TLS_PSK_WITH_NULL_SHA                    0x2C   /**< Weak! */
 #define MBEDTLS_TLS_DHE_PSK_WITH_NULL_SHA                0x2D   /**< Weak! */
 #define MBEDTLS_TLS_RSA_PSK_WITH_NULL_SHA                0x2E   /**< Weak! */
 #define MBEDTLS_TLS_RSA_WITH_AES_128_CBC_SHA             0x2F
 
 #define MBEDTLS_TLS_DHE_RSA_WITH_AES_128_CBC_SHA         0x33
+#define MBEDTLS_TLS_DH_anon_WITH_AES_128_CBC_SHA         0x34
 #define MBEDTLS_TLS_RSA_WITH_AES_256_CBC_SHA             0x35
 #define MBEDTLS_TLS_DHE_RSA_WITH_AES_256_CBC_SHA         0x39
+#define MBEDTLS_TLS_DH_anon_WITH_AES_256_CBC_SHA         0x3A
 
 #define MBEDTLS_TLS_RSA_WITH_NULL_SHA256                 0x3B   /**< Weak! */
 #define MBEDTLS_TLS_RSA_WITH_AES_128_CBC_SHA256          0x3C   /**< TLS 1.2 */
@@ -62,12 +68,16 @@ extern "C" {
 
 #define MBEDTLS_TLS_RSA_WITH_CAMELLIA_128_CBC_SHA        0x41
 #define MBEDTLS_TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA    0x45
+#define MBEDTLS_TLS_DH_anon_WITH_CAMELLIA_128_CBC_SHA    0x46
 
 #define MBEDTLS_TLS_DHE_RSA_WITH_AES_128_CBC_SHA256      0x67   /**< TLS 1.2 */
 #define MBEDTLS_TLS_DHE_RSA_WITH_AES_256_CBC_SHA256      0x6B   /**< TLS 1.2 */
+#define MBEDTLS_TLS_DH_anon_WITH_AES_128_CBC_SHA256      0x6C
+#define MBEDTLS_TLS_DH_anon_WITH_AES_256_CBC_SHA256      0x6D
 
 #define MBEDTLS_TLS_RSA_WITH_CAMELLIA_256_CBC_SHA        0x84
 #define MBEDTLS_TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA    0x88
+#define MBEDTLS_TLS_DH_anon_WITH_CAMELLIA_256_CBC_SHA    0x89
 
 #define MBEDTLS_TLS_PSK_WITH_RC4_128_SHA                 0x8A
 #define MBEDTLS_TLS_PSK_WITH_3DES_EDE_CBC_SHA            0x8B
@@ -88,6 +98,9 @@ extern "C" {
 #define MBEDTLS_TLS_RSA_WITH_AES_256_GCM_SHA384          0x9D   /**< TLS 1.2 */
 #define MBEDTLS_TLS_DHE_RSA_WITH_AES_128_GCM_SHA256      0x9E   /**< TLS 1.2 */
 #define MBEDTLS_TLS_DHE_RSA_WITH_AES_256_GCM_SHA384      0x9F   /**< TLS 1.2 */
+
+#define MBEDTLS_TLS_DH_anon_WITH_AES_128_GCM_SHA256      0xA6
+#define MBEDTLS_TLS_DH_anon_WITH_AES_256_GCM_SHA384      0xA7
 
 #define MBEDTLS_TLS_PSK_WITH_AES_128_GCM_SHA256          0xA8   /**< TLS 1.2 */
 #define MBEDTLS_TLS_PSK_WITH_AES_256_GCM_SHA384          0xA9   /**< TLS 1.2 */
@@ -113,9 +126,11 @@ extern "C" {
 
 #define MBEDTLS_TLS_RSA_WITH_CAMELLIA_128_CBC_SHA256     0xBA   /**< TLS 1.2 */
 #define MBEDTLS_TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA256 0xBE   /**< TLS 1.2 */
+#define MBEDTLS_TLS_DH_anon_WITH_CAMELLIA_128_CBC_SHA256 0xBF
 
 #define MBEDTLS_TLS_RSA_WITH_CAMELLIA_256_CBC_SHA256     0xC0   /**< TLS 1.2 */
 #define MBEDTLS_TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA256 0xC4   /**< TLS 1.2 */
+#define MBEDTLS_TLS_DH_anon_WITH_CAMELLIA_256_CBC_SHA256 0xC5
 
 #define MBEDTLS_TLS_ECDH_ECDSA_WITH_NULL_SHA             0xC001 /**< Weak! */
 #define MBEDTLS_TLS_ECDH_ECDSA_WITH_RC4_128_SHA          0xC002 /**< Not in SSL3! */
@@ -221,6 +236,8 @@ extern "C" {
 #define MBEDTLS_TLS_RSA_WITH_CAMELLIA_256_GCM_SHA384         0xC07B /**< TLS 1.2 */
 #define MBEDTLS_TLS_DHE_RSA_WITH_CAMELLIA_128_GCM_SHA256     0xC07C /**< TLS 1.2 */
 #define MBEDTLS_TLS_DHE_RSA_WITH_CAMELLIA_256_GCM_SHA384     0xC07D /**< TLS 1.2 */
+#define MBEDTLS_TLS_DH_anon_WITH_CAMELLIA_128_GCM_SHA256     0xC084
+#define MBEDTLS_TLS_DH_anon_WITH_CAMELLIA_256_GCM_SHA384     0xC085
 #define MBEDTLS_TLS_ECDHE_ECDSA_WITH_CAMELLIA_128_GCM_SHA256 0xC086 /**< TLS 1.2 */
 #define MBEDTLS_TLS_ECDHE_ECDSA_WITH_CAMELLIA_256_GCM_SHA384 0xC087 /**< TLS 1.2 */
 #define MBEDTLS_TLS_ECDH_ECDSA_WITH_CAMELLIA_128_GCM_SHA256  0xC088 /**< TLS 1.2 */
@@ -296,6 +313,7 @@ typedef enum {
     MBEDTLS_KEY_EXCHANGE_ECDH_RSA,
     MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA,
     MBEDTLS_KEY_EXCHANGE_ECJPAKE,
+    MBEDTLS_KEY_EXCHANGE_DH_ANON,
 } mbedtls_key_exchange_type_t;
 
 /* Key exchanges using a certificate */
@@ -343,6 +361,7 @@ typedef enum {
 /* Key exchanges that involve ephemeral keys */
 #if defined(MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED)       || \
     defined(MBEDTLS_KEY_EXCHANGE_DHE_PSK_ENABLED)       || \
+    defined(MBEDTLS_KEY_EXCHANGE_DH_ANON_ENABLED)       || \
     defined(MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED)     || \
     defined(MBEDTLS_KEY_EXCHANGE_ECDHE_PSK_ENABLED)     || \
     defined(MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED)   || \
@@ -360,7 +379,8 @@ typedef enum {
 
 /* Key exchanges using DHE */
 #if defined(MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED)       || \
-    defined(MBEDTLS_KEY_EXCHANGE_DHE_PSK_ENABLED)
+    defined(MBEDTLS_KEY_EXCHANGE_DHE_PSK_ENABLED)       || \
+    defined(MBEDTLS_KEY_EXCHANGE_DH_ANON_ENABLED)
 #define MBEDTLS_KEY_EXCHANGE__SOME__DHE_ENABLED
 #endif
 
@@ -418,6 +438,7 @@ static inline int mbedtls_ssl_ciphersuite_has_pfs( const mbedtls_ssl_ciphersuite
     {
         case MBEDTLS_KEY_EXCHANGE_DHE_RSA:
         case MBEDTLS_KEY_EXCHANGE_DHE_PSK:
+        case MBEDTLS_KEY_EXCHANGE_DH_ANON:
         case MBEDTLS_KEY_EXCHANGE_ECDHE_RSA:
         case MBEDTLS_KEY_EXCHANGE_ECDHE_PSK:
         case MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA:
@@ -487,6 +508,7 @@ static inline int mbedtls_ssl_ciphersuite_uses_dhe( const mbedtls_ssl_ciphersuit
     {
         case MBEDTLS_KEY_EXCHANGE_DHE_RSA:
         case MBEDTLS_KEY_EXCHANGE_DHE_PSK:
+        case MBEDTLS_KEY_EXCHANGE_DH_ANON:
             return( 1 );
 
         default:

@@ -758,6 +758,36 @@
 #define MBEDTLS_ECDSA_DETERMINISTIC
 
 /**
+ * \def MBEDTLS_KEY_EXCHANGE_DH_ANON_ENABLED
+ *
+ * Enable the ADH based ciphersuite modes in SSL / TLS.
+ *
+ * Requires: MBEDTLS_DHM_C
+ *
+ * This enables the following ciphersuites (if other requisites are
+ * enabled as well):
+ *      MBEDTLS_TLS_DH_anon_WITH_AES_256_GCM_SHA384
+ *      MBEDTLS_TLS_DH_anon_WITH_AES_256_CBC_SHA256
+ *      MBEDTLS_TLS_DH_anon_WITH_AES_256_CBC_SHA
+ *      MBEDTLS_TLS_DH_anon_WITH_CAMELLIA_256_GCM_SHA384
+ *      MBEDTLS_TLS_DH_anon_WITH_CAMELLIA_256_CBC_SHA256
+ *      MBEDTLS_TLS_DH_anon_WITH_CAMELLIA_256_CBC_SHA
+ *      MBEDTLS_TLS_DH_anon_WITH_AES_128_GCM_SHA256
+ *      MBEDTLS_TLS_DH_anon_WITH_AES_128_CBC_SHA256
+ *      MBEDTLS_TLS_DH_anon_WITH_AES_128_CBC_SHA
+ *      MBEDTLS_TLS_DH_anon_WITH_CAMELLIA_128_GCM_SHA256
+ *      MBEDTLS_TLS_DH_anon_WITH_CAMELLIA_128_CBC_SHA256
+ *      MBEDTLS_TLS_DH_anon_WITH_CAMELLIA_128_CBC_SHA
+ *      MBEDTLS_TLS_DH_anon_WITH_3DES_EDE_CBC_SHA
+ *      MBEDTLS_TLS_DH_anon_WITH_DES_CBC_SHA
+ *      MBEDTLS_TLS_DH_anon_WITH_RC4_128_MD5
+ *
+ * \warning    ADH is suspectible to MITM attack, and thus not secure.
+ *
+ */
+#define MBEDTLS_KEY_EXCHANGE_DH_ANON_ENABLED
+
+/**
  * \def MBEDTLS_KEY_EXCHANGE_PSK_ENABLED
  *
  * Enable the PSK based ciphersuite modes in SSL / TLS.

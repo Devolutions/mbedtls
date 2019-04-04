@@ -1981,7 +1981,8 @@ static int ssl_parse_server_hello( mbedtls_ssl_context *ssl )
 }
 
 #if defined(MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED) ||                       \
-    defined(MBEDTLS_KEY_EXCHANGE_DHE_PSK_ENABLED)
+    defined(MBEDTLS_KEY_EXCHANGE_DHE_PSK_ENABLED) ||                       \
+    defined(MBEDTLS_KEY_EXCHANGE_DH_ANON_ENABLED)
 static int ssl_parse_server_dh_params( mbedtls_ssl_context *ssl, unsigned char **p,
                                        unsigned char *end )
 {
@@ -2017,7 +2018,8 @@ static int ssl_parse_server_dh_params( mbedtls_ssl_context *ssl, unsigned char *
     return( ret );
 }
 #endif /* MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED ||
-          MBEDTLS_KEY_EXCHANGE_DHE_PSK_ENABLED */
+          MBEDTLS_KEY_EXCHANGE_DHE_PSK_ENABLED ||
+          MBEDTLS_KEY_EXCHANGE_DH_ANON_ENABLED */
 
 #if defined(MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED) ||                     \
     defined(MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED) ||                   \
@@ -2447,10 +2449,12 @@ start_processing:
     else
 #endif /* MBEDTLS_KEY_EXCHANGE_PSK_ENABLED ||
           MBEDTLS_KEY_EXCHANGE_RSA_PSK_ENABLED */
-#if defined(MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED) ||                       \
-    defined(MBEDTLS_KEY_EXCHANGE_DHE_PSK_ENABLED)
+#if defined(MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED) ||                     \
+    defined(MBEDTLS_KEY_EXCHANGE_DHE_PSK_ENABLED)  ||                     \
+    defined(MBEDTLS_KEY_EXCHANGE_DH_ANON_ENABLED)
     if( ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_DHE_RSA ||
-        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_DHE_PSK )
+        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_DHE_PSK ||
+        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_DH_ANON )
     {
         if( ssl_parse_server_dh_params( ssl, &p, end ) != 0 )
         {
@@ -2462,7 +2466,8 @@ start_processing:
     }
     else
 #endif /* MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED ||
-          MBEDTLS_KEY_EXCHANGE_DHE_PSK_ENABLED */
+          MBEDTLS_KEY_EXCHANGE_DHE_PSK_ENABLED ||
+          MBEDTLS_KEY_EXCHANGE_DH_ANON_ENABLED */
 #if defined(MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED) ||                     \
     defined(MBEDTLS_KEY_EXCHANGE_ECDHE_PSK_ENABLED) ||                     \
     defined(MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED)
@@ -2897,8 +2902,10 @@ static int ssl_write_client_key_exchange( mbedtls_ssl_context *ssl )
 
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "=> write client key exchange" ) );
 
-#if defined(MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED)
-    if( ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_DHE_RSA )
+#if defined(MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED) ||                       \
+    defined(MBEDTLS_KEY_EXCHANGE_DH_ANON_ENABLED)
+    if( ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_DHE_RSA ||
+        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_DH_ANON )
     {
         /*
          * DHM key exchange -- send G^X mod P
@@ -2935,7 +2942,8 @@ static int ssl_write_client_key_exchange( mbedtls_ssl_context *ssl )
         MBEDTLS_SSL_DEBUG_MPI( 3, "DHM: K ", &ssl->handshake->dhm_ctx.K  );
     }
     else
-#endif /* MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED */
+#endif /* MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED ||
+          MBEDTLS_KEY_EXCHANGE_DH_ANON_ENABLED */
 #if defined(MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED) ||                     \
     defined(MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED) ||                   \
     defined(MBEDTLS_KEY_EXCHANGE_ECDH_RSA_ENABLED) ||                      \
@@ -3198,7 +3206,8 @@ static int ssl_write_certificate_verify( mbedtls_ssl_context *ssl )
         ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_RSA_PSK ||
         ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_PSK ||
         ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_DHE_PSK ||
-        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECJPAKE )
+        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECJPAKE ||
+        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_DH_ANON )
     {
         MBEDTLS_SSL_DEBUG_MSG( 2, ( "<= skip write certificate verify" ) );
         ssl->state++;
@@ -3241,7 +3250,8 @@ static int ssl_write_certificate_verify( mbedtls_ssl_context *ssl )
         ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_RSA_PSK ||
         ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_PSK ||
         ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_DHE_PSK ||
-        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECJPAKE )
+        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECJPAKE ||
+        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_DH_ANON )
     {
         MBEDTLS_SSL_DEBUG_MSG( 2, ( "<= skip write certificate verify" ) );
         ssl->state++;
