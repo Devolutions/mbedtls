@@ -814,6 +814,38 @@ static int x509_get_crt_ext( unsigned char **p,
                 return( ret );
             break;
 
+        case MBEDTLS_X509_EXT_SUBJECT_KEY_IDENTIFIER:
+            /* Parse subject key identifier */
+            if( ( ret = mbedtls_asn1_get_tag( p, end_ext_data, &len,
+                MBEDTLS_ASN1_OCTET_STRING ) ) != 0 )
+            {
+                return ( ret );
+            }
+            else
+            {
+                crt->subject_key_id.len = len;
+                crt->subject_key_id.tag = MBEDTLS_ASN1_OCTET_STRING;
+                crt->subject_key_id.p = *p;
+                *p += len;
+            }
+            break;
+
+        case MBEDTLS_X509_EXT_AUTHORITY_KEY_IDENTIFIER:
+            /* Parse authority key identifier */
+            if( ( ret = mbedtls_asn1_get_tag( p, end_ext_data, &len,
+                MBEDTLS_ASN1_OCTET_STRING ) ) != 0 )
+            {
+                return ( ret );
+            }
+            else
+            {
+                crt->authority_key_id.len = len;
+                crt->authority_key_id.tag = MBEDTLS_ASN1_OCTET_STRING;
+                crt->authority_key_id.p = *p;
+                *p += len;
+            }
+            break;
+
         default:
             return( MBEDTLS_ERR_X509_FEATURE_UNAVAILABLE );
         }
